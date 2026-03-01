@@ -57,7 +57,7 @@ local function DrawInteract(id, interact, plyCoords, camCoords, camForward, dist
         local nuiOptions = {}
 
         for i, opt in ipairs(options) do
-            if opt.isVisible and opt.isVisible() then
+            if opt.isVisible == nil or (opt.isVisible and opt.isVisible()) then
                 table.insert(validOptions, { index = i, opt = opt })
             end
         end
@@ -93,14 +93,7 @@ local function DrawInteract(id, interact, plyCoords, camCoords, camForward, dist
                 opt.progress = 0 
                 opt.activeBump = false 
 
-                local canInteract = true
-                if type(opt.canInteract) == "function" then
-                    canInteract = opt.canInteract()
-                elseif opt.canInteract ~= nil then
-                    canInteract = opt.canInteract
-                end
-
-                if opt.key and canInteract then
+                if opt.key and (opt.canInteract == nil or (opt.canInteract and opt.canInteract())) then
                     if opt.hold and opt.hold > 0 then
                         local holdTimeMs = opt.hold * 1000
                         
