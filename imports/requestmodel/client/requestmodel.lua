@@ -5,7 +5,9 @@ Lib47.RequestModel = function( model, timeout )
     end
 
     model = type(model) == 'number' and model or joaat(model)
-    timeout = timeout or 30 * 1000
+    if not timeout or type(timeout) ~= 'number' then
+        timeout = 30 * 1000
+    end
 
     if HasModelLoaded(model) then 
         return model 

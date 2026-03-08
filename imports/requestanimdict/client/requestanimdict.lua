@@ -3,11 +3,13 @@ Lib47.RequestAnimDict = function( dict, timeout )
         error(("No anim dict provided by %s"):format(GetInvokingResource()))
     end
 
+    if not timeout or type(timeout) ~= 'number' then
+        timeout = 30 * 1000
+    end
+
     if HasAnimDictLoaded(dict) then 
         return dict 
     end
-
-    timeout = timeout or 30 * 1000
 
     RequestAnimDict(dict)
 
