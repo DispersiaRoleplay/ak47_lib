@@ -151,6 +151,15 @@ Config.Defaults = {
 		canClose = true
 	},
 
+	NpcInteract = {
+		-- Default colors matching your solid background design
+		colors = {
+			colorPrimary = "rgba(18, 18, 22, 0.9)", 
+			colorSecondary = "#FFD700",
+			colorText = "#ffffff",
+		},
+	},
+
 	CallbackTimeout = 15 -- seconds
 }
 
