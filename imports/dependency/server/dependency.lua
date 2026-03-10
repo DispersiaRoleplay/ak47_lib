@@ -9,10 +9,10 @@ Lib47.EnsureDependency = function(name, quiet)
     if state ~= 'missing' and state ~= 'started' then
         ExecuteCommand('start ' .. name)
         
-        local timeout = 3000
-        while GetResourceState(name) ~= 'started' and timeout > 0 do
+        local isTimeOut = Lib47.IsTimeOut(3000) 
+        
+        while GetResourceState(name) ~= 'started' and not isTimeOut() do
             Wait(10)
-            timeout = timeout - 1
         end
 
         if GetResourceState(name) == 'started' then
