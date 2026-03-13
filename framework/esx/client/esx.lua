@@ -24,6 +24,7 @@ RegisterNetEvent('esx:setJob', function(job)
 end)
 
 RegisterNetEvent('esx:updatePlayerData', function(key, value)
+    if not Lib47.PlayerData then return end
     Lib47.PlayerData[key] = value
     TriggerEvent('ak47_lib:OnPlayerDataUpdate', Lib47.PlayerData)
     TriggerEvent('ak47_bridge:OnPlayerDataUpdate', Lib47.PlayerData) -- will be removed soon
