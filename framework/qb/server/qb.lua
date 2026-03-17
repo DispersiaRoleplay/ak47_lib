@@ -155,16 +155,15 @@ Lib47.GetInventoryItems = function(inventoryId)
 end
 
 Lib47.GetItems = function()
-    return QBCore.Shared.Items
+    return Integration.GetItems()
 end
 
 Lib47.GetItemLabel = function(item)
-    if QBCore.Shared.Items[item] then
-        return QBCore.Shared.Items[item].label
-    else
-        print('^1Item: ^3['..item..']^1 missing in QBCore.Shared.Items^0')
-        return item
+    local items = Lib47.GetItems()
+    if items and [item] then
+        return items[item].label
     end
+    return item
 end
 
 Lib47.GetInventoryItem = function(source, item)
@@ -190,12 +189,12 @@ end
 Lib47.CanCarryItem = function(source, item, amount)
     local Player = Lib47.GetPlayer(source)
     local itemData = QBCore.Shared.Items[item]
-    
+
     if not itemData then return false end
-    
+
     local totalWeight = QBCore.Player.GetTotalWeight(Player.PlayerData.items)
     local itemWeight = itemData.weight * amount
-    
+
     return (totalWeight + itemWeight) <= QBCore.Config.Player.MaxWeight
 end
 
@@ -230,9 +229,9 @@ end
 Lib47.GeneratePlate = function(format, prefix)
     local pattern = format or "AAAA 11A"
     local plate = ""
-    
-    if prefix then 
-        plate = tostring(prefix) 
+
+    if prefix then
+        plate = tostring(prefix)
     end
 
     for i = 1, #pattern do
@@ -242,7 +241,7 @@ Lib47.GeneratePlate = function(format, prefix)
         elseif c == '1' then
             plate = plate .. math.random(0, 9)
         else
-            plate = plate .. c 
+            plate = plate .. c
         end
     end
 
@@ -261,7 +260,7 @@ Lib47.GiveVehicle = function(source, model)
     local citizenid = Lib47.GetIdentifier(source)
     local plate = Lib47.GeneratePlate("AAAA 11A")
     local hash = GetHashKey(model)
-    
+
     MySQL.Async.execute('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state) VALUES (?, ?, ?, ?, ?, ?, ?)',
     {
         Lib47.GetLicense(source),

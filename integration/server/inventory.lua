@@ -15,7 +15,7 @@ if Config.Inventory == 'auto' then
         for _, script in pairs(scripts) do
             if GetResourceState(script) == 'started' then
                 Config.Inventory = script
-                
+
                 if Config.Inventory == 'qb-inventory' then
                     RegisterNetEvent('ak47_lib:closeqbinventory', function()
                         local source = source
@@ -40,6 +40,46 @@ if Config.Inventory == 'auto' then
             end
         end
     end)
+end
+
+Integration.GetItems = function()
+    if Config.Inventory == 'ak47_inventory' then
+        return exports['ak47_inventory']:Items()
+
+    elseif Config.Inventory == 'ak47_qb_inventory' then
+        return exports['ak47_qb_inventory']:Items()
+
+    elseif Config.Inventory == 'ox_inventory' then
+        return exports['ox_inventory']:Items()
+
+    elseif Config.Inventory == 'qs-inventory' then
+        return exports['qs-inventory']:GetItemList()
+
+    -- elseif Config.Inventory == 'ps-inventory' then
+    --     return exports['ps-inventory']:Items()
+
+    -- elseif Config.Inventory == 'lj-inventory' then
+    --     return exports['lj-inventory']:Items()
+
+    -- elseif Config.Inventory == 'qb-inventory' or Config.Inventory == 'qb-inventory-old' then
+    --     return exports['qb-inventory']:Items()
+
+    elseif Config.Inventory == 'codem-inventory' then
+        return exports['codem-inventory']:GetItemList()
+
+    elseif Config.Inventory == 'tgiann-inventory' then
+        return exports['tgiann-inventory']:Items()
+
+    elseif Config.Inventory == 'origen_inventory' then
+        return exports['origen_inventory']:Items()
+
+
+    -- add your inventory support above this code
+    elseif Config.Framework == 'esx' then
+        return ESX.GetItems()
+    elseif Config.Framework == 'qb' then
+        return QBCore.Shared.Items
+    end
 end
 
 Integration.AddItem = function(source, item, amount, slot, meta)
@@ -72,8 +112,8 @@ Integration.AddItem = function(source, item, amount, slot, meta)
 
     elseif Config.Inventory == 'origen_inventory' then
         return exports['origen_inventory']:AddItem(source, item, amount, slot, meta)
-        
-    
+
+
     -- add your inventory support above this code
     elseif Config.Framework == 'esx' then
         local xPlayer = Lib47.GetPlayer(source)
@@ -140,7 +180,3 @@ Integration.GetInventoryItems = function(inventoryId)
         return Player.PlayerData.items
     end
 end
-
-
-
-

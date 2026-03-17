@@ -164,23 +164,15 @@ Lib47.GetInventoryItems = function(inventoryId)
 end
 
 Lib47.GetItems = function()
-	if GetResourceState('qs-inventory') == 'started' then
-		return exports['qs-inventory']:GetItemList()
-	elseif GetResourceState('ox_inventory') == 'started' then
-		return exports['ox_inventory']:Items()
-	else
-		return exports['es_extended']:getSharedObject().Items
-	end
+    return Integration.GetItems()
 end
 
 Lib47.GetItemLabel = function(item)
-	local items = Lib47.GetItems()
-    if items and items[item] then
-	   return items[item].label
-    else
-        print('^1Item: ^3['..item..']^1 missing^0')
-        return item
+    local items = Lib47.GetItems()
+    if items and [item] then
+        return items[item].label
     end
+    return item
 end
 
 Lib47.GetInventoryItem = function(source, item)
@@ -238,14 +230,14 @@ Lib47.GetVehicleOwner = function(plate)
     return found and found[1] and found[1].owner
 end
 
--- Format Syntax: "A" = Letter, "1" = Number. 
+-- Format Syntax: "A" = Letter, "1" = Number.
 -- Anything else (spaces, dashes) is kept as-is.
 Lib47.GeneratePlate = function(format, prefix)
     local pattern = format or "AAAA 11A"
     local plate = ""
-    
-    if prefix then 
-        plate = tostring(prefix) 
+
+    if prefix then
+        plate = tostring(prefix)
     end
 
     for i = 1, #pattern do
@@ -255,7 +247,7 @@ Lib47.GeneratePlate = function(format, prefix)
         elseif c == '1' then
             plate = plate .. math.random(0, 9)
         else
-            plate = plate .. c 
+            plate = plate .. c
         end
     end
 
