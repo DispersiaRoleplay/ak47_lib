@@ -121,6 +121,12 @@ Lib47.IsAdmin = function(source)
 	return IsPlayerAceAllowed(source, 'command')
 end
 
+Lib47.HasGroupPermission = function(source, group)
+	local xPlayer = Lib47.GetPlayer(source)
+	if not xPlayer then return false end
+	return xPlayer.getGroup() == group
+end
+
 -- ====================================================================================
 --                                     ECONOMY
 -- ====================================================================================
@@ -169,7 +175,7 @@ end
 
 Lib47.GetItemLabel = function(item)
     local items = Lib47.GetItems()
-    if items and [item] then
+    if items and items[item] then
         return items[item].label
     end
     return item

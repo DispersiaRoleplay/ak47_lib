@@ -109,6 +109,10 @@ Lib47.IsAdmin = function(source)
     return IsPlayerAceAllowed(source, 'command')
 end
 
+Lib47.HasGroupPermission = function(source, group)
+    return exports.qbx_core:HasPermission(source, group)
+end
+
 -- ====================================================================================
 --                                     ECONOMY
 -- ====================================================================================
