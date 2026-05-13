@@ -28,8 +28,8 @@ end)
 
 RegisterNetEvent('esx:setJob', function(job)
     Lib47.PlayerData.job = job
-    TriggerEvent('ak47_lib:OnJobUpdate', job)
-    TriggerEvent('ak47_bridge:OnJobUpdate', job) -- will be removed soon
+    TriggerEvent('ak47_lib:OnJobUpdate', Lib47.GetJob())
+    TriggerEvent('ak47_bridge:OnJobUpdate', Lib47.GetJob()) -- will be removed soon
 end)
 
 RegisterNetEvent('esx:updatePlayerData', function(key, value)

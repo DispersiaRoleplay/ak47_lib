@@ -84,9 +84,8 @@ Lib47.GetGang = function()
         }
     end
 
-    if Config.Framework == 'qb' or Config.Framework == 'qbx' then
-        local PlayerData = Lib47.GetPlayerData()
-        return PlayerData and PlayerData.gang
+    if (Config.Framework == 'qb' or Config.Framework == 'qbx') and Lib47.PlayerData and Lib47.PlayerData.gang then
+        return Lib47.PlayerData.gang
     end
 
     return {
@@ -99,3 +98,24 @@ Lib47.GetGang = function()
         }
     }
 end
+
+Lib47.RefreshGangData = function()
+    Wait(1000)
+    Lib47.PlayerData.gang = Lib47.GetGang()
+    TriggerEvent('ak47_lib:OnGangUpdate', Lib47.PlayerData.gang)
+end
+
+RegisterNetEvent('ak47_territories:leavegang', Lib47.RefreshGangData)
+RegisterNetEvent('ak47_qb_territories:leavegang', Lib47.RefreshGangData)
+RegisterNetEvent('ak47_gangs:leave', Lib47.RefreshGangData)
+RegisterNetEvent('ak47_qb_gangs:leave', Lib47.RefreshGangData)
+
+RegisterNetEvent('ak47_territories:removegang', Lib47.RefreshGangData)
+RegisterNetEvent('ak47_qb_territories:removegang', Lib47.RefreshGangData)
+RegisterNetEvent('ak47_gangs:removegang', Lib47.RefreshGangData)
+RegisterNetEvent('ak47_qb_gangs:removegang', Lib47.RefreshGangData)
+
+RegisterNetEvent('ak47_territories:setgang', Lib47.RefreshGangData)
+RegisterNetEvent('ak47_qb_territories:setgang', Lib47.RefreshGangData)
+RegisterNetEvent('ak47_gangs:setgang', Lib47.RefreshGangData)
+RegisterNetEvent('ak47_qb_gangs:setgang', Lib47.RefreshGangData)
