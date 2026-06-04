@@ -292,23 +292,27 @@ RegisterNUICallback('contextExit', function(data, cb)
 end)
 
 RegisterNUICallback('contextBack', function(data, cb)
-    if activeMenuId then
-        local menu = registeredMenus[activeMenuId]
-        if menu then
-            if menu.onBack then menu.onBack() end
-            if menu.onClose then menu.onClose(data.key) end
-            
-            if menu.menu then
-                local prevHistory = table.remove(menuHistoryStack)
-                local focusIndex = prevHistory and (prevHistory.id == menu.menu and prevHistory.index or nil) or nil
-                if not focusIndex then menuHistoryStack = {} end
-                Interface.ShowContext(menu.menu, keyboardOnly, { focusIndex = focusIndex })
-            else
-                Interface.HideContext(true, data.key)
-            end
-        end
-    end
     cb('ok')
+
+    if not activeMenuId then return end
+    local menu = registeredMenus[activeMenuId]
+    if not menu then return end
+
+    local seqBefore = contextShowSeq
+
+    if menu.onBack then menu.onBack() end
+    if menu.onClose then menu.onClose(data.key) end
+
+    if contextShowSeq ~= seqBefore then return end
+
+    if menu.menu then
+        local prevHistory = table.remove(menuHistoryStack)
+        local focusIndex = prevHistory and (prevHistory.id == menu.menu and prevHistory.index or nil) or nil
+        if not focusIndex then menuHistoryStack = {} end
+        Interface.ShowContext(menu.menu, keyboardOnly, { focusIndex = focusIndex })
+    else
+        Interface.HideContext(true, data.key)
+    end
 end)
 
 AddEventHandler('onResourceStop', function(resourceName)
