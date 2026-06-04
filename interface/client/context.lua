@@ -4,6 +4,7 @@ local contextState = { visible = false, invoked = nil }
 local menuHistoryStack = {}
 local keyboardOnly = true
 local keyboardThreadActive = false
+local contextShowSeq = 0
 
 -- ==========================================
 -- DATA SANITIZER FOR NUI
@@ -102,6 +103,7 @@ Interface.ShowContext = function(id, keyOnly, navOpts)
     contextState.invoked = GetInvokingResource()
     contextState.visible = true
     activeMenuId = id
+    contextShowSeq = contextShowSeq + 1
 
     if keyboardOnly then
         SetNuiFocus(false, false)
@@ -251,22 +253,23 @@ RegisterNUICallback('menuCheck', function(data, cb)
 end)
 
 RegisterNUICallback('contextAction', function(data, cb)
-    if not activeMenuId then cb('ok'); return end
-    local menu = registeredMenus[activeMenuId]
-    if not menu then cb('ok'); return end
+    cb('ok')
+
+    if not activeMenuId then return end
+
+    local startMenuId = activeMenuId
+    local menu = registeredMenus[startMenuId]
+    if not menu then return end
 
     local index = data.index + 1
     local option = menu.options[index]
-    if not option then cb('ok'); return end
+    if not option then return end
 
     local args = injectArgs(option, option.args)
 
-    if option.onSelect then
-        CreateThread(function()
-            option.onSelect(args) 
-        end)
-    end
-    
+    local seqBefore = contextShowSeq
+
+    if option.onSelect then option.onSelect(args) end
     if option.event then TriggerEvent(option.event, args) end
     if option.serverEvent then TriggerServerEvent(option.serverEvent, args) end
 
@@ -276,13 +279,11 @@ RegisterNUICallback('contextAction', function(data, cb)
     end
 
     if option.menu then
-        table.insert(menuHistoryStack, { id = activeMenuId, index = data.index })
+        table.insert(menuHistoryStack, { id = startMenuId, index = data.index })
         Interface.ShowContext(option.menu, keyboardOnly, { isForward = true })
-    elseif data.close ~= false and option.close ~= false then
-        Interface.HideContext(false) 
+    elseif contextShowSeq == seqBefore and data.close ~= false and option.close ~= false then
+        Interface.HideContext(false)
     end
-
-    cb('ok')
 end)
 
 RegisterNUICallback('contextExit', function(data, cb)
