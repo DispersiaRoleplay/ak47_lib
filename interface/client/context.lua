@@ -131,6 +131,7 @@ Interface.ShowContext = function(id, keyOnly, navOpts)
     local size = menuConfig.size or config.size
     local borders = menuConfig.borders or config.borders
     local colors = menuConfig.colors or config.colors
+    local style = menuConfig.style or config.style
 
     local nuiData = {
         id = menuConfig.id,
@@ -140,6 +141,7 @@ Interface.ShowContext = function(id, keyOnly, navOpts)
         size = size,
         borders = borders,
         colors = colors,
+        style = style,
         menu = menuConfig.menu,
         canClose = canClose,
         focusIndex = navOpts.focusIndex, 
