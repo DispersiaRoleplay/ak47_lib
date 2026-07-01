@@ -242,13 +242,16 @@ Lib47.GetInventoryItems = function(inventoryId)
 end
 
 Lib47.GetItems = function()
-    return Integration.GetItems()
+    return Lib47.Items
+end
+
+Lib47.GetWeapons = function()
+    return Lib47.Weapons
 end
 
 Lib47.GetItemLabel = function(item)
-    local items = Lib47.GetItems()
-    if items and items[item] then
-        return items[item].label
+    if Lib47.Items and Lib47.Items[item] then
+        return Lib47.Items[item].label
     end
     return item
 end
@@ -303,6 +306,14 @@ Lib47.CreateUseableItem = QBCore.Functions.CreateUseableItem
 -- ====================================================================================
 
 Lib47.Vehicles = {}
+
+Lib47.GetFrameworkVehicles = function()
+    return Lib47.Vehicles
+end
+
+Lib47.GetFrameworkVehicleByHash = function(hash)
+    return Lib47.Vehicles[hash]
+end
 
 Lib47.IsVehicleOwner = function(source, plate)
     local citizenid = Lib47.GetIdentifier(source)
@@ -369,7 +380,7 @@ end
 Citizen.CreateThread(function()
     if QBCore.Shared.Vehicles then
         for k, v in pairs(QBCore.Shared.Vehicles) do
-            Lib47.Vehicles[GetHashKey(v.model)] = v.name
+            Lib47.Vehicles[GetHashKey(v.model)] = v
         end
     end
 end)

@@ -144,7 +144,7 @@ Interface.ShowContext = function(id, keyOnly, navOpts)
     })
 end
 
-Interface.HideContext = function(runOnExit, keyPressed)
+Interface.HideContext = function(runOnExit, keyPressed, suspend)
     if runOnExit and activeMenuId then
         local menu = registeredMenus[activeMenuId]
         if menu then
@@ -157,17 +157,22 @@ Interface.HideContext = function(runOnExit, keyPressed)
         SetNuiFocus(false, false)
     end
     
-    contextState.visible = false
-    activeMenuId = nil
-    menuHistoryStack = {}
     SendNUIMessage({ action = 'CLOSE_CONTEXT_MENU' })
+
+    if not suspend then
+        contextState.visible = false
+        activeMenuId = nil
+        menuHistoryStack = {}
+    else
+        contextState.visible = false
+    end
 end
 
 -- ==========================================
 -- MENU HELPERS
 -- ==========================================
 Interface.GetOpenMenu = function()
-    return contextState.visible and activeMenuId or nil
+    return (contextState.visible and activeMenuId or nil), keyboardOnly
 end
 
 Interface.SetMenuOptions = function(id, options, index)
@@ -233,10 +238,15 @@ end)
 RegisterNUICallback('menuSideScroll', function(data, cb)
     if not activeMenuId then cb('ok'); return end
     local menu = registeredMenus[activeMenuId]
-    if menu and menu.onSideScroll then
+    
+    if menu then
         local idx = data.index + 1
-        if menu.options[idx] then menu.options[idx].defaultIndex = data.scrollIndex end
-        menu.onSideScroll(idx, data.scrollIndex + 1, injectArgs(menu.options[idx], data.args))
+        if menu.options[idx] then 
+            menu.options[idx].defaultIndex = data.scrollIndex 
+        end
+        if menu.onSideScroll then
+            menu.onSideScroll(idx, data.scrollIndex + 1, injectArgs(menu.options[idx], data.args))
+        end
     end
     cb('ok')
 end)
@@ -244,10 +254,15 @@ end)
 RegisterNUICallback('menuCheck', function(data, cb)
     if not activeMenuId then cb('ok'); return end
     local menu = registeredMenus[activeMenuId]
-    if menu and menu.onCheck then
+    
+    if menu then
         local idx = data.index + 1
-        if menu.options[idx] then menu.options[idx].checked = data.checked end
-        menu.onCheck(idx, data.checked, injectArgs(menu.options[idx], data.args))
+        if menu.options[idx] then 
+            menu.options[idx].checked = data.checked 
+        end
+        if menu.onCheck then
+            menu.onCheck(idx, data.checked, injectArgs(menu.options[idx], data.args))
+        end
     end
     cb('ok')
 end)

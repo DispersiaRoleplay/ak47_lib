@@ -107,3 +107,11 @@ Lib47.GetCharacterName = function()
     return GetPlayerName(PlayerId())
 end
 
+Lib47.GetItems = function()
+    return Lib47.Items
+end
+
+Lib47.GetWeapons = function()
+    return Lib47.Weapons
+end
+

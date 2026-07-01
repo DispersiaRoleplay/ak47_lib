@@ -2,6 +2,11 @@ Lib47.GetTargetMetaValue = function(targetServerId, metaKey)
     return Lib47.Callback.Await('ak47_lib:callback:server:GetTargetMetaValue', nil, targetServerId, metaKey)
 end
 
+Lib47.IsItemTypeWeapon = function(name)
+    if not name then return false end
+    return name:lower():find('weapon_')
+end
+
 exports('GetLibObject', function()
     return Lib47
 end)

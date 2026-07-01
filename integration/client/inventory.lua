@@ -1,4 +1,5 @@
 Lib47.Items = {}
+Lib47.Weapons = {}
 Lib47.ItemsByHash = {}
 
 if Config.Inventory == 'auto' then
@@ -48,6 +49,9 @@ FetchInvItems = function()
         local nameHash = GetHashKey(name)
         Lib47.ItemsByHash[nameHash] = v
         Lib47.ItemsByHash[nameHash].name = name
+        if Lib47.IsItemTypeWeapon(name) then
+            Lib47.Weapons[name] = v
+        end
     end
 end
 

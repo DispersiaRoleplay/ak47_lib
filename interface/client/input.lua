@@ -5,7 +5,12 @@ Interface.ShowInput = function(heading, rows, options)
     if inputPromise then return nil end
 
     if Interface.HideNpcInteract then Interface.HideNpcInteract(false) end
-    if Interface.GetOpenMenu() then Interface.HideContext(false) end
+    
+    local previousMenu, wasKeyboardOnly = Interface.GetOpenMenu()
+
+    if previousMenu then 
+        Interface.HideContext(false, nil, true) 
+    end
 
     inputState.invoked = GetInvokingResource()
     inputState.visible = true
@@ -30,9 +35,7 @@ Interface.ShowInput = function(heading, rows, options)
     
     inputPromise = promise.new()
 
-    Interface.LockContextNav()
     SetNuiFocus(true, true)
-    
     SendNUIMessage({
         action = 'OPEN_INPUT_DIALOG',
         heading = heading,
@@ -44,8 +47,14 @@ Interface.ShowInput = function(heading, rows, options)
 
     inputState.visible = false
     SetNuiFocus(false, false)
-    Interface.UnlockContextNav()
     inputPromise = nil
+    
+    if previousMenu and result == nil then
+        Interface.ShowContext(previousMenu, wasKeyboardOnly)
+    
+    elseif previousMenu and result ~= nil then
+        Interface.HideContext(false)
+    end
     
     return result
 end
