@@ -6,6 +6,12 @@ Lib47.Framework = 'esx'
 print(string.format("^2['FRAMEWORK']: %s^0", Config.Framework))
 
 ESX = exports['es_extended']:getSharedObject()
+Lib47.Vehicles = {}
+
+CreateThread(function()
+    Wait(2000)
+    Lib47.Vehicles = Lib47.Callback.Await('ak47_lib:callback:getvehicles')
+end)
 
 -- ====================================================================================
 --                                     CORE
@@ -113,5 +119,13 @@ end
 
 Lib47.GetWeapons = function()
     return Lib47.Weapons
+end
+
+Lib47.GetFrameworkVehicles = function()
+    return Lib47.Vehicles
+end
+
+Lib47.GetFrameworkVehicleByHash = function(hash)
+    return Lib47.Vehicles[hash]
 end
 

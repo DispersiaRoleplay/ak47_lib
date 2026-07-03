@@ -458,3 +458,7 @@ Citizen.CreateThread(function()
         print('^1Vehicle table not found!^0')
     end
 end)
+
+Lib47.Callback.Register('ak47_lib:callback:getvehicles', function( source )
+    return Lib47.GetFrameworkVehicles()
+end)

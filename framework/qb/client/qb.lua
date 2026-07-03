@@ -6,6 +6,7 @@ Lib47.Framework = 'qb'
 print(string.format("^2['FRAMEWORK']: %s^0", Config.Framework))
 
 QBCore = exports['qb-core']:GetCoreObject()
+Lib47.Vehicles = QBCore.Shared.Vehicles
 
 -- ====================================================================================
 --                                     CORE
@@ -124,4 +125,12 @@ end
 
 Lib47.GetWeapons = function()
     return Lib47.Weapons
+end
+
+Lib47.GetFrameworkVehicles = function()
+    return Lib47.Vehicles
+end
+
+Lib47.GetFrameworkVehicleByHash = function(hash)
+    return Lib47.Vehicles[hash]
 end

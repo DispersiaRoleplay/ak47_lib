@@ -46,22 +46,27 @@ local function StartKeyboardThread(disableInput)
             
             if disableInput then
                 DisableAllControlActions(0)
-            else
-                DisableControlAction(0, 24, true) -- Attack
-                DisableControlAction(0, 257, true) -- Attack 2
             end
             
+            -- Directional Arrows
             if IsDisabledControlJustPressed(0, 172) then SendNUIMessage({ action = 'CONTEXT_CONTROL', key = 'ArrowUp' }) end
             if IsDisabledControlJustPressed(0, 173) then SendNUIMessage({ action = 'CONTEXT_CONTROL', key = 'ArrowDown' }) end
             if IsDisabledControlJustPressed(0, 174) then SendNUIMessage({ action = 'CONTEXT_CONTROL', key = 'ArrowLeft' }) end
             if IsDisabledControlJustPressed(0, 175) then SendNUIMessage({ action = 'CONTEXT_CONTROL', key = 'ArrowRight' }) end
             
-            if IsDisabledControlJustPressed(0, 176) or IsDisabledControlJustPressed(0, 18) then
+            -- Control 18 is strictly INPUT_ENTER (Select)
+            if IsDisabledControlJustPressed(0, 191) then
                 SendNUIMessage({ action = 'CONTEXT_CONTROL', key = 'Enter' })
             end
             
-            if IsDisabledControlJustPressed(0, 177) or IsDisabledControlJustPressed(0, 194) or IsDisabledControlJustPressed(0, 200) then
+            -- Control 194 is INPUT_FRONTEND_RRIGHT (Backspace) -> Go Back
+            if IsDisabledControlJustPressed(0, 194) then
                 SendNUIMessage({ action = 'CONTEXT_CONTROL', key = 'Backspace' })
+            end
+
+            -- Control 200 is INPUT_FRONTEND_PAUSE_ALTERNATE (Escape) -> Force Close
+            if IsDisabledControlJustPressed(0, 200) then
+                SendNUIMessage({ action = 'CONTEXT_CONTROL', key = 'Escape' })
             end
         end
         keyboardThreadActive = false

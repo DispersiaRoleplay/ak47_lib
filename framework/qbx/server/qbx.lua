@@ -309,14 +309,14 @@ end
 --                                    VEHICLES
 -- ====================================================================================
 
-Lib47.Vehicles = {}
+Lib47.Vehicles = exports.qbx_core:GetVehiclesByHash()
 
 Lib47.GetFrameworkVehicles = function()
     return Lib47.Vehicles
 end
 
 Lib47.GetFrameworkVehicleByHash = function(hash)
-    return Lib47.Vehicles[hash]
+    return exports.qbx_core:GetVehiclesByHash(hash)
 end
 
 Lib47.IsVehicleOwner = function(source, plate)
@@ -380,12 +380,3 @@ end
 -- ====================================================================================
 --                                THREADS & EXPORTS
 -- ====================================================================================
-
-Citizen.CreateThread(function()
-    local sharedVehicles = exports.qbx_core:GetVehiclesByName()
-    if sharedVehicles then
-        for k, v in pairs(sharedVehicles) do
-            Lib47.Vehicles[GetHashKey(v.model)] = v
-        end
-    end
-end)

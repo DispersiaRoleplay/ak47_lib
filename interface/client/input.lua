@@ -49,11 +49,8 @@ Interface.ShowInput = function(heading, rows, options)
     SetNuiFocus(false, false)
     inputPromise = nil
     
-    if previousMenu and result == nil then
+    if previousMenu then
         Interface.ShowContext(previousMenu, wasKeyboardOnly)
-    
-    elseif previousMenu and result ~= nil then
-        Interface.HideContext(false)
     end
     
     return result
